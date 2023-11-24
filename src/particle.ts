@@ -1,5 +1,7 @@
 import { Vector } from "./vector";
-import { randomNumBetween } from "./utils";
+
+const BALL_X = "BALL-X";
+const BALL_Y = "BALL-Y";
 
 export class Particle {
   public pos: Vector;
@@ -9,18 +11,23 @@ export class Particle {
 
   constructor(x: number, y: number) {
     this.pos = new Vector(x, y);
-    this.vel = Vector.random(-1, 1, -1, 1);
+    this.vel = new Vector(5, 5);
     this.acc = new Vector(0, 0);
-    this.radius = randomNumBetween(5, 50);
+    this.radius = 50;
   }
 
   update() {
+    this.handleEdges(window.screen.width, window.screen.height);
+
     this.pos = Vector.add(this.pos, this.vel);
     this.vel = Vector.add(this.vel, this.acc);
     this.acc = Vector.mult(this.acc, 0);
+
+    localStorage.setItem(BALL_X, this.pos.x.toString());
+    localStorage.setItem(BALL_Y, this.pos.y.toString());
   }
 
-  handleEdges(width: number, height: number) {
+  private handleEdges(width: number, height: number) {
     if (this.pos.x - this.radius <= 0 || this.pos.x + this.radius >= width) {
       this.vel.x *= -1;
     }
@@ -29,7 +36,7 @@ export class Particle {
     }
   }
 
-  checkCollision(particle: Particle) {
+  private checkCollision(particle: Particle) {
     const v = Vector.sub(this.pos, particle.pos);
     const d = v.mag();
 
@@ -66,5 +73,25 @@ export class Particle {
       this.vel = a_after;
       particle.vel = b_after;
     }
+  }
+
+
+  draw(ctx: CanvasRenderingContext2D) {
+    const x = localStorage.getItem(BALL_X)!;
+    const y = localStorage.getItem(BALL_Y)!;
+
+    this.pos.x = parseInt(x);
+    this.pos.y = parseInt(y);
+
+    ctx.beginPath();
+    ctx.arc(
+      this.pos.x - window.screenX,
+      this.pos.y - window.screenY,
+      this.radius,
+      0,
+      2 * Math.PI,
+    );
+    ctx.fill();
+    ctx.closePath()
   }
 }
