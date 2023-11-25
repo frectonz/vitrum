@@ -6,3 +6,20 @@
 body {
   overflow: hidden;
 }
+
+.blur {
+  filter: blur(20px);
+}
+
+.btns {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+
+  z-index: 100;
+}
+
+.btns > button {
+  padding: 5px;
+  font-size: 20px;
+}

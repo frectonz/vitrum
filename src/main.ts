@@ -31,12 +31,17 @@ class Canvas {
       this.canvas.height = window.innerHeight;
     });
 
+    const blur = document.querySelector("#blur")!;
+
+    blur.addEventListener("click", () => {
+      this.canvas.classList.toggle("blur");
+    });
+
     requestAnimationFrame(() => this.update());
   }
 
   update() {
-    this.ctx.fillStyle = "rgba(255, 255, 255, .1)";
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     if (this.isFirst) {
       this.particles.forEach((current, i) => {
