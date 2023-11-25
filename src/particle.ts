@@ -13,6 +13,7 @@ export class Particle {
   private radius: number;
   private color: string;
   private index: number;
+  private isFirst: boolean;
 
   constructor(index: number, isFirst: boolean) {
     this.index = index;
@@ -21,19 +22,21 @@ export class Particle {
       randomNumBetween(100, window.screen.width - 100),
       randomNumBetween(100, window.screen.height - 100),
     );
-    this.vel = Vector.random(-2, 2, -2, 2);
+    this.vel = Vector.random(-1, 5, -1, 5);
     this.acc = new Vector(0, 0);
 
     if (isFirst) {
       this.color = randomColor();
       localStorage.setItem(PARTICLE_C(index), this.color);
 
-      this.radius = randomNumBetween(5, 50);
+      this.radius = randomNumBetween(20, 50);
       localStorage.setItem(PARTICLE_R(index), this.radius.toString());
     } else {
       this.color = localStorage.getItem(PARTICLE_C(index))!;
       this.radius = parseInt(localStorage.getItem(PARTICLE_R(index))!);
     }
+
+    this.isFirst = isFirst;
   }
 
   update() {
@@ -102,11 +105,13 @@ export class Particle {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    const x = localStorage.getItem(PARTICLE_X(this.index))!;
-    const y = localStorage.getItem(PARTICLE_Y(this.index))!;
+    if (!this.isFirst) {
+      const x = localStorage.getItem(PARTICLE_X(this.index))!;
+      const y = localStorage.getItem(PARTICLE_Y(this.index))!;
 
-    this.pos.x = parseInt(x);
-    this.pos.y = parseInt(y);
+      this.pos.x = parseInt(x);
+      this.pos.y = parseInt(y);
+    }
 
     ctx.beginPath();
     ctx.arc(
