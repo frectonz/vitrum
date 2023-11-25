@@ -1,19 +1,29 @@
+import { randomColor, randomNumBetween } from "./utils";
 import { Vector } from "./vector";
 
-const BALL_X = "BALL-X";
-const BALL_Y = "BALL-Y";
+const BALL_X = (i: number) => `BALL-X-${i}`;
+const BALL_Y = (i: number) => `BALL-Y-${i}`;
 
 export class Particle {
   public pos: Vector;
   private vel: Vector;
   private acc: Vector;
-  public radius: number;
+  private radius: number;
+  private color: string;
+  private index: number;
 
-  constructor(x: number, y: number) {
-    this.pos = new Vector(x, y);
-    this.vel = new Vector(5, 5);
+  constructor(index: number) {
+    this.index = index;
+
+    this.pos = new Vector(
+      randomNumBetween(10, window.screen.width),
+      randomNumBetween(10, window.screen.height),
+    );
+    this.vel = new Vector(randomNumBetween(-5, 5), randomNumBetween(-5, 5));
     this.acc = new Vector(0, 0);
-    this.radius = 50;
+    this.radius = randomNumBetween(10, 100);
+
+    this.color = randomColor();
   }
 
   update() {
@@ -23,8 +33,8 @@ export class Particle {
     this.vel = Vector.add(this.vel, this.acc);
     this.acc = Vector.mult(this.acc, 0);
 
-    localStorage.setItem(BALL_X, this.pos.x.toString());
-    localStorage.setItem(BALL_Y, this.pos.y.toString());
+    localStorage.setItem(BALL_X(this.index), this.pos.x.toString());
+    localStorage.setItem(BALL_Y(this.index), this.pos.y.toString());
   }
 
   private handleEdges(width: number, height: number) {
@@ -36,7 +46,7 @@ export class Particle {
     }
   }
 
-  private checkCollision(particle: Particle) {
+  checkCollision(particle: Particle) {
     const v = Vector.sub(this.pos, particle.pos);
     const d = v.mag();
 
@@ -75,10 +85,9 @@ export class Particle {
     }
   }
 
-
   draw(ctx: CanvasRenderingContext2D) {
-    const x = localStorage.getItem(BALL_X)!;
-    const y = localStorage.getItem(BALL_Y)!;
+    const x = localStorage.getItem(BALL_X(this.index))!;
+    const y = localStorage.getItem(BALL_Y(this.index))!;
 
     this.pos.x = parseInt(x);
     this.pos.y = parseInt(y);
@@ -91,7 +100,8 @@ export class Particle {
       0,
       2 * Math.PI,
     );
+    ctx.fillStyle = this.color;
     ctx.fill();
-    ctx.closePath()
+    ctx.closePath();
   }
 }

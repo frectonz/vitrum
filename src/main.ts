@@ -1,12 +1,11 @@
-import './style.css'
-import { Particle } from './particle';
-
+import "./style.css";
+import { Particle } from "./particle";
 
 class Canvas {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
 
-  private p: Particle;
+  private particles: Particle[];
 
   private isFirst: boolean;
 
@@ -23,7 +22,7 @@ class Canvas {
 
     document.body.append(this.canvas);
 
-    this.p = new Particle(150, 100);
+    this.particles = new Array(20).fill(null).map((_, i) => new Particle(i));
 
     window.addEventListener("resize", () => {
       this.canvas.width = window.outerWidth;
@@ -37,10 +36,21 @@ class Canvas {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     if (this.isFirst) {
-      this.p.update();
-      this.p.draw(this.ctx);
-    } else {
-      this.p.draw(this.ctx);
+      this.particles.forEach((current, i) => {
+        const rest = this.particles.slice(i + 1);
+        rest.forEach((particle) => {
+          particle.checkCollision(current);
+        });
+      });
+    }
+
+    for (const p of this.particles) {
+      if (this.isFirst) {
+        p.update();
+        p.draw(this.ctx);
+      } else {
+        p.draw(this.ctx);
+      }
     }
 
     requestAnimationFrame(() => this.update());
