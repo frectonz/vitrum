@@ -22,7 +22,7 @@ class Canvas {
 
     document.body.append(this.canvas);
 
-    this.particles = new Array(30)
+    this.particles = new Array(10)
       .fill(null)
       .map((_, i) => new Particle(i, this.isFirst));
 
