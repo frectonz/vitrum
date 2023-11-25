@@ -3,7 +3,7 @@ export function randomNumBetween(min: number, max: number) {
 }
 
 export function randomColor() {
-  const COLORS = ["#5e6262", "#c9b373", "#853232", "#e29134", "#dee2ec"];
+  const COLORS = ["#050305", "#120a3d", "#412854", "#4cc35b", "#68da23"];
   return COLORS[Math.floor(Math.random() * COLORS.length)];
 }
 

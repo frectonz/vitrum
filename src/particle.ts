@@ -1,8 +1,10 @@
 import { randomColor, randomNumBetween } from "./utils";
 import { Vector } from "./vector";
 
-const BALL_X = (i: number) => `BALL-X-${i}`;
-const BALL_Y = (i: number) => `BALL-Y-${i}`;
+const PARTICLE_X = (i: number) => `PARTICLE-X-${i}`;
+const PARTICLE_Y = (i: number) => `PARTICLE-Y-${i}`;
+const PARTICLE_R = (i: number) => `PARTICLE-R-${i}`;
+const PARTICLE_C = (i: number) => `PARTICLE-C-${i}`;
 
 export class Particle {
   public pos: Vector;
@@ -12,36 +14,50 @@ export class Particle {
   private color: string;
   private index: number;
 
-  constructor(index: number) {
+  constructor(index: number, isFirst: boolean) {
     this.index = index;
 
     this.pos = new Vector(
-      randomNumBetween(10, window.screen.width),
-      randomNumBetween(10, window.screen.height),
+      randomNumBetween(100, window.screen.width - 100),
+      randomNumBetween(100, window.screen.height - 100),
     );
-    this.vel = new Vector(randomNumBetween(-5, 5), randomNumBetween(-5, 5));
+    this.vel = Vector.random(-2, 2, -2, 2);
     this.acc = new Vector(0, 0);
-    this.radius = randomNumBetween(10, 100);
 
-    this.color = randomColor();
+    if (isFirst) {
+      this.color = randomColor();
+      localStorage.setItem(PARTICLE_C(index), this.color);
+
+      this.radius = randomNumBetween(5, 50);
+      localStorage.setItem(PARTICLE_R(index), this.radius.toString());
+    } else {
+      this.color = localStorage.getItem(PARTICLE_C(index))!;
+      this.radius = parseInt(localStorage.getItem(PARTICLE_R(index))!);
+    }
   }
 
   update() {
-    this.handleEdges(window.screen.width, window.screen.height);
-
     this.pos = Vector.add(this.pos, this.vel);
     this.vel = Vector.add(this.vel, this.acc);
     this.acc = Vector.mult(this.acc, 0);
 
-    localStorage.setItem(BALL_X(this.index), this.pos.x.toString());
-    localStorage.setItem(BALL_Y(this.index), this.pos.y.toString());
+    this.handleEdges();
+
+    localStorage.setItem(PARTICLE_X(this.index), this.pos.x.toString());
+    localStorage.setItem(PARTICLE_Y(this.index), this.pos.y.toString());
   }
 
-  private handleEdges(width: number, height: number) {
-    if (this.pos.x - this.radius <= 0 || this.pos.x + this.radius >= width) {
+  private handleEdges() {
+    if (
+      this.pos.x - this.radius <= 0 ||
+      this.pos.x + this.radius >= window.screen.width
+    ) {
       this.vel.x *= -1;
     }
-    if (this.pos.y - this.radius <= 0 || this.pos.y + this.radius >= height) {
+    if (
+      this.pos.y - this.radius <= 0 ||
+      this.pos.y + this.radius >= window.screen.height
+    ) {
       this.vel.y *= -1;
     }
   }
@@ -86,8 +102,8 @@ export class Particle {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    const x = localStorage.getItem(BALL_X(this.index))!;
-    const y = localStorage.getItem(BALL_Y(this.index))!;
+    const x = localStorage.getItem(PARTICLE_X(this.index))!;
+    const y = localStorage.getItem(PARTICLE_Y(this.index))!;
 
     this.pos.x = parseInt(x);
     this.pos.y = parseInt(y);

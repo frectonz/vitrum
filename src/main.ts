@@ -22,7 +22,9 @@ class Canvas {
 
     document.body.append(this.canvas);
 
-    this.particles = new Array(20).fill(null).map((_, i) => new Particle(i));
+    this.particles = new Array(100)
+      .fill(null)
+      .map((_, i) => new Particle(i, this.isFirst));
 
     window.addEventListener("resize", () => {
       this.canvas.width = window.outerWidth;
@@ -33,7 +35,8 @@ class Canvas {
   }
 
   update() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillStyle = "#000";
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     if (this.isFirst) {
       this.particles.forEach((current, i) => {
