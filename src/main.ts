@@ -15,9 +15,11 @@ class Canvas {
 
     elector({
       onLeaderElected: () => {
+        console.log("I am the leader")
         this.isFirst = true;
       },
       onLeaderDemoted: () => {
+        console.log("I got demoted")
         this.isFirst = false;
       },
     });
@@ -34,7 +36,7 @@ class Canvas {
 
     this.particles = new Array(10)
       .fill(null)
-      .map((_, i) => new Particle(i, this.isFirst));
+      .map((_, i) => new Particle(i));
 
     window.addEventListener("resize", () => {
       this.canvas.width = window.innerWidth;
@@ -65,9 +67,9 @@ class Canvas {
     for (const p of this.particles) {
       if (this.isFirst) {
         p.update();
-        p.draw(this.ctx);
+        p.draw(this.ctx, this.isFirst);
       } else {
-        p.draw(this.ctx);
+        p.draw(this.ctx, this.isFirst);
       }
     }
 

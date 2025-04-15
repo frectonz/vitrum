@@ -13,9 +13,8 @@ export class Particle {
   private radius: number;
   private color: string;
   private index: number;
-  private isFirst: boolean;
 
-  constructor(index: number, isFirst: boolean) {
+  constructor(index: number) {
     this.index = index;
 
     this.pos = new Vector(
@@ -25,18 +24,11 @@ export class Particle {
     this.vel = Vector.random(-1, 5, -1, 5);
     this.acc = new Vector(0, 0);
 
-    if (isFirst) {
-      this.color = randomColor();
-      localStorage.setItem(PARTICLE_C(index), this.color);
+    const color = localStorage.getItem(PARTICLE_C(index)) ?? randomColor();
+    const radius = localStorage.getItem(PARTICLE_R(index));
 
-      this.radius = randomNumBetween(20, 50);
-      localStorage.setItem(PARTICLE_R(index), this.radius.toString());
-    } else {
-      this.color = localStorage.getItem(PARTICLE_C(index))!;
-      this.radius = parseInt(localStorage.getItem(PARTICLE_R(index))!);
-    }
-
-    this.isFirst = isFirst;
+    this.color = color;
+    this.radius = radius ? parseInt(radius) : randomNumBetween(20, 50);
   }
 
   update() {
@@ -104,8 +96,8 @@ export class Particle {
     }
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
-    if (!this.isFirst) {
+  draw(ctx: CanvasRenderingContext2D, isFirst: boolean) {
+    if (!isFirst) {
       const x = localStorage.getItem(PARTICLE_X(this.index))!;
       const y = localStorage.getItem(PARTICLE_Y(this.index))!;
 
