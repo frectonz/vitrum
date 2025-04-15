@@ -5,11 +5,17 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  kalmanjs:
+    specifier: ^1.1.0
+    version: 1.1.0
   leader-tab:
     specifier: ^0.0.2
     version: 0.0.2
 
 devDependencies:
+  '@types/kalmanjs':
+    specifier: ^1.1.0
+    version: 1.1.0
   typescript:
     specifier: ^5.2.2
     version: 5.3.2
@@ -313,6 +319,10 @@ packages:
     dev: true
     optional: true
 
+  /@types/kalmanjs@1.1.0:
+    resolution: {integrity: sha512-x93QR3TXzzy6ZN2oi85a/DTHrwgcxWwykhF+meyxHCHKrErbOHqTl3J7mDh4uZXjRDt8lGJrp9UjLRfbyPx6ug==}
+    dev: true
+
   /esbuild@0.19.7:
     resolution: {integrity: sha512-6brbTZVqxhqgbpqBR5MzErImcpA0SQdoKOkcWK/U30HtQxnokIpG3TX2r0IJqbFUzqLjhU/zC1S5ndgakObVCQ==}
     engines: {node: '>=12'}
@@ -350,6 +360,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /kalmanjs@1.1.0:
+    resolution: {integrity: sha512-Gkm2DAKIX8geuDcEJ92e80EmQ6TyIzWBJk6AFk+aDLofQ4G/KoDe1RCY9WMuXFe0NQxsTi7HYh9BVQneOtlvkg==}
+    dev: false
 
   /leader-tab@0.0.2:
     resolution: {integrity: sha512-v2uaDN+VtFc6ooJsRtJyuvJ+zHmKFCYnb/n4Ch8zzPwRmr6PKeUVed9UVKYyowTYKpR0TVFA7svR5XjPrBJ+eQ==}

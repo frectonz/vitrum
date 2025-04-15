@@ -1,3 +1,4 @@
+import KalmanFilter from "kalmanjs";
 import { randomColor, randomNumBetween } from "./utils";
 import { Vector } from "./vector";
 
@@ -96,6 +97,9 @@ export class Particle {
     }
   }
 
+  private offsetX = new KalmanFilter({ R: 0.01, Q: 3 });
+  private offsetY = new KalmanFilter({ R: 0.01, Q: 3 });
+
   draw(ctx: CanvasRenderingContext2D, isFirst: boolean) {
     if (!isFirst) {
       const x = localStorage.getItem(PARTICLE_X(this.index))!;
@@ -105,10 +109,13 @@ export class Particle {
       this.pos.y = parseInt(y);
     }
 
+    const offsetX = this.offsetX.filter(window.screenX);
+    const offsetY = this.offsetY.filter(window.screenY);
+
     ctx.beginPath();
     ctx.arc(
-      this.pos.x - window.screenX,
-      this.pos.y - window.screenY,
+      this.pos.x - offsetX,
+      this.pos.y - offsetY,
       this.radius,
       0,
       2 * Math.PI,
