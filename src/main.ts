@@ -7,20 +7,24 @@ class Canvas {
   private ctx: CanvasRenderingContext2D;
 
   private particles: Particle[];
-
   private isFirst: boolean;
+  private running: boolean;
 
   constructor() {
     this.isFirst = false;
 
+    const isLeader = document.querySelector<HTMLParagraphElement>("#isLeader")!;
+
     elector({
       onLeaderElected: () => {
-        console.log("I am the leader")
+        console.log("I am the leader");
         this.isFirst = true;
+        isLeader.style.display = "block";
       },
       onLeaderDemoted: () => {
-        console.log("I got demoted")
+        console.log("I got demoted");
         this.isFirst = false;
+        isLeader.style.display = "none";
       },
     });
 
@@ -34,9 +38,7 @@ class Canvas {
 
     document.body.append(this.canvas);
 
-    this.particles = new Array(10)
-      .fill(null)
-      .map((_, i) => new Particle(i));
+    this.particles = new Array(10).fill(null).map((_, i) => new Particle(i));
 
     window.addEventListener("resize", () => {
       this.canvas.width = window.innerWidth;
@@ -44,15 +46,27 @@ class Canvas {
     });
 
     const blur = document.querySelector("#blur")!;
+    const stop = document.querySelector("#stop")!;
 
     blur.addEventListener("click", () => {
       this.canvas.classList.toggle("blur");
+    });
+
+    this.running = true;
+    stop.addEventListener("click", () => {
+      this.running = !this.running;
+
+      if (this.running) {
+        requestAnimationFrame(() => this.update());
+      }
     });
 
     requestAnimationFrame(() => this.update());
   }
 
   update() {
+    if (!this.running) return;
+
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     if (this.isFirst) {

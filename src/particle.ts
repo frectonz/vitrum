@@ -18,18 +18,42 @@ export class Particle {
   constructor(index: number) {
     this.index = index;
 
-    this.pos = new Vector(
-      randomNumBetween(100, window.screen.width - 100),
-      randomNumBetween(100, window.screen.height - 100),
-    );
+    const posX = localStorage.getItem(PARTICLE_X(index));
+    const positionX = posX
+      ? parseInt(posX)
+      : randomNumBetween(200, window.screen.width - 200);
+    const posXNew = posX ? false : true;
+    if (posXNew) {
+      localStorage.setItem(PARTICLE_X(index), positionX.toString());
+    }
+
+    const posY = localStorage.getItem(PARTICLE_Y(index));
+    const positionY = posY
+      ? parseInt(posY)
+      : randomNumBetween(200, window.screen.height - 200);
+    const posYNew = posY ? false : true;
+    if (posYNew) {
+      localStorage.setItem(PARTICLE_Y(index), positionY.toString());
+    }
+
+    this.pos = new Vector(positionX, positionY);
+
+    const color = localStorage.getItem(PARTICLE_C(index));
+    this.color = color ? color : randomColor();
+    const colorNew = color ? false : true;
+    if (colorNew) {
+      localStorage.setItem(PARTICLE_C(index), this.color);
+    }
+
+    const radius = localStorage.getItem(PARTICLE_R(index));
+    this.radius = radius ? parseInt(radius) : randomNumBetween(20, 50);
+    const radiusNew = radius ? false : true;
+    if (radiusNew) {
+      localStorage.setItem(PARTICLE_R(index), this.radius.toString());
+    }
+
     this.vel = Vector.random(-1, 5, -1, 5);
     this.acc = new Vector(0, 0);
-
-    const color = localStorage.getItem(PARTICLE_C(index)) ?? randomColor();
-    const radius = localStorage.getItem(PARTICLE_R(index));
-
-    this.color = color;
-    this.radius = radius ? parseInt(radius) : randomNumBetween(20, 50);
   }
 
   update() {
