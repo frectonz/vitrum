@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+dependencies:
+  leader-tab:
+    specifier: ^0.0.2
+    version: 0.0.2
+
 devDependencies:
   typescript:
     specifier: ^5.2.2
@@ -345,6 +350,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /leader-tab@0.0.2:
+    resolution: {integrity: sha512-v2uaDN+VtFc6ooJsRtJyuvJ+zHmKFCYnb/n4Ch8zzPwRmr6PKeUVed9UVKYyowTYKpR0TVFA7svR5XjPrBJ+eQ==}
+    dev: false
 
   /nanoid@3.3.7:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}

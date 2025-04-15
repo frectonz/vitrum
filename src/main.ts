@@ -1,5 +1,6 @@
 import "./style.css";
 import { Particle } from "./particle";
+import { elector } from "leader-tab";
 
 class Canvas {
   private canvas: HTMLCanvasElement;
@@ -10,7 +11,16 @@ class Canvas {
   private isFirst: boolean;
 
   constructor() {
-    this.isFirst = window.location.hash === "#main";
+    this.isFirst = false;
+
+    elector({
+      onLeaderElected: () => {
+        this.isFirst = true;
+      },
+      onLeaderDemoted: () => {
+        this.isFirst = false;
+      },
+    });
 
     this.canvas = document.createElement("canvas");
 
